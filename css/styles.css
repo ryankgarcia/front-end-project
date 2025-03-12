@@ -1,1 +1,17 @@
 /* most of your CSS that is not related to layout or resetting styles here */
+
+.button {
+  color: white;
+  background-color: #293184;
+  border-radius: 4px;
+  padding-left: 1.7rem;
+  padding-right: 1.7rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+h1 {
+  text-transform: uppercase;
+
+  /* color: white; */
+}

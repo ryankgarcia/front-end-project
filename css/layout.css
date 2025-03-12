@@ -1,1 +1,14 @@
 /* CSS grid classes here, AND any layout-related media queries */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+}
+
+.column-full {
+  flex-basis: 100%;
+}
