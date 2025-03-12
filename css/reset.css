@@ -1,3 +1,4 @@
+/* you may need to use this to change the default margin or padding on paragraphs, lists, etc. */
 * {
   box-sizing: border-box;
 }
