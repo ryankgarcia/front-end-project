@@ -3,6 +3,21 @@
 .container {
   max-width: 800px;
   margin: 0 auto;
+
+  @media (width <= 576px) {
+    flex-basis: 50%;
+    background-image: images/dualipa.jpg;
+  }
+}
+
+.background-image {
+  background-image: url('images/sofi_stadium.jpeg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  position: fixed;
+  top: 0 auto;
+  left: 0 auto;
 }
 
 .row {
