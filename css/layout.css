@@ -9,6 +9,11 @@
   display: flex;
 }
 
+.row-end {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .overlay {
   background-color: white;
   opacity: 0.7;
@@ -21,7 +26,4 @@
 
 .column-full {
   flex-basis: 100%;
-
-  /* align-items: center;
-  justify-content: center; */
 }
