@@ -29,31 +29,41 @@
     </header>
     <main>
       <div class="overlay"></div>
-      <div class="row">
-        <div class="column-full">
-          <h2>Where are you looking for live events?</h2>
+      <div id="main-page">
+        <div class="row">
+          <div class="column-full">
+            <h2>Where are you looking for live events?</h2>
+          </div>
         </div>
+        <form>
+          <div class="row">
+            <label for="location">Location</label>
+          </div>
+          <div class="row">
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="Ex: Los Angeles, New York, etc."
+              required />
+          </div>
+          <div class="row">
+            <label for="keyword">Keyword Search</label>
+          </div>
+          <div class="row">
+            <input
+              type="text"
+              id="keyword"
+              placeholder="Ex: Football, Baseball, Concerts"
+              required />
+          </div>
+          <div class="row">
+            <button type="submit" class="button">Go</button>
+          </div>
+        </form>
       </div>
-      <div class="row">
-        <label for="location">Location</label>
-      </div>
-      <div class="row">
-        <input
-          type="text"
-          id="location"
-          placeholder="Ex: Los Angeles, New York, etc." />
-      </div>
-      <div class="row">
-        <label for="keyword">Keyword Search</label>
-      </div>
-      <div class="row">
-        <input
-          type="text"
-          id="keyword"
-          placeholder="Ex: Football, Baseball, Concerts" />
-      </div>
-      <div class="row">
-        <button type="button" class="button">Go</button>
+      <div id="results">
+        <ul id="items"></ul>
       </div>
     </main>
     <script src="js/data.js"></script>

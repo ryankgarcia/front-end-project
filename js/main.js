@@ -1,20 +1,69 @@
-'use strict';
-async function fetchEventData() {
-  try {
-    const response = await fetch(
-      'https://app.ticketmaster.com/discovery/v2/events.json?city=los+angeles&city=phoenix&apikey=9tbiDGYZwnFcvD2p7AUJuB3lqwoWIfe4',
-    );
-    // const response = await fetch(
-    //   'https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&city=los+angeles&apikey=9tbiDGYZwnFcvD2p7AUJuB3lqwoWIfe4',
-    // );
-    // const response = await fetch(
-    //   'https://app.ticketmaster.com/discovery/v2/events.json?includeSpellcheck=yes&keyword=concerta&page=2&city=los+angeles&apikey=9tbiDGYZwnFcvD2p7AUJuB3lqwoWIfe4',
-    // );
-    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
-    const data = await response.json();
-    console.log('Event Data:', data);
-  } catch (error) {
-    console.error('fetch failed!', error);
-  }
+"use strict";
+const $locationInput = document.getElementById('location');
+const $keywordInput = document.getElementById('keyword');
+const $form = document.querySelector('form');
+const $mainPageView = document.getElementById('main-page');
+const $itemsId = document.getElementById('items');
+const $results = document.getElementById('results');
+if (!$locationInput)
+    throw new Error('$locationInput query failed');
+if (!$keywordInput)
+    throw new Error('$keywordInput query failed');
+if (!$form)
+    throw new Error('$form query failed');
+if (!$mainPageView)
+    throw new Error('$mainPageView query failed');
+if (!$itemsId)
+    throw new Error('$itemsId query failed');
+if (!$results)
+    throw new Error('$results query failed');
+async function fetchEventLocationData(city, keyword) {
+    try {
+        const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}&city=${city}&apikey=9tbiDGYZwnFcvD2p7AUJuB3lqwoWIfe4`);
+        if (!response.ok)
+            throw new Error(`HTTP Error! Status: ${response.status}`);
+        const data = await response.json();
+        const events = data?._embedded?.events;
+        console.log('data:', data);
+        console.log('events', events);
+        // for (let i = 0; i < data.length; i++) {
+        //   const $li = renderEntry(data[i]);
+        //   $itemsId.appendChild($li);
+        // }
+        // call the viewSwap function here on to the results ID view.
+        // call it conditionally only if the array.length is greater than 0
+    }
+    catch (error) {
+        console.error('fetch failed!', error);
+    }
 }
-fetchEventData();
+$form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const $formElements = $form.elements;
+    if (!$formElements)
+        throw new Error('$formElements query failed');
+    fetchEventLocationData($formElements.location.value, $formElements.keyword.value);
+    // $form.reset();
+});
+// for the renderEntry function below only keep what you need in order to do
+// the function call correctly
+function renderEntry(entry) {
+    const $liRow = document.createElement('li');
+    $liRow.setAttribute('class', 'row');
+    const $divColHalf = document.createElement('div');
+    $divColHalf.setAttribute('class', 'column-half');
+    const $image = document.createElement('img');
+    $image.setAttribute('src', entry.photoUrl);
+    const $textDiv = document.createElement('div');
+    $textDiv.setAttribute('class', 'column-half');
+    const $pStrong = document.createElement('p');
+    $pStrong.textContent = entry.title;
+    const $pDescription = document.createElement('p');
+    $pDescription.textContent = entry.notes;
+    $liRow.appendChild($divColHalf);
+    $divColHalf.appendChild($image);
+    $liRow.appendChild($textDiv);
+    $textDiv.appendChild($pStrong);
+    $textDiv.appendChild($pDescription);
+    return $liRow;
+}
