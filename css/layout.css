@@ -1,12 +1,13 @@
 /* CSS grid classes here, AND any layout-related media queries */
 
+/* after lunch change the media queries so they're mobile FIRST then account for desktop */
+
+/* instead of width <=500px change to >=500px and then the changes you want to make */
+
 .container {
   max-width: 800px;
   margin: 0 auto;
-
-  @media (width <=500px) {
-    width: 85%;
-  }
+  width: 85%;
 }
 
 .row {

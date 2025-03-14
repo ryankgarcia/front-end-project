@@ -15,10 +15,10 @@
 header {
   color: white;
   background-color: #293184;
-  font-size: 1.2rem;
+  font-size: large;
 
-  @media (width <= 500px) {
-    font-size: large;
+  @media (width >= 500px) {
+    font-size: 1.2rem;
   }
 }
 
@@ -43,12 +43,8 @@ input {
   height: 2rem;
   border-radius: 0.4rem;
   border-width: 0.1rem;
-  margin-left: 10%;
-
-  @media (width <=500px) {
-    margin-left: 8%;
-    margin-right: 8%;
-  }
+  margin-left: 8%;
+  margin-right: 8%;
 }
 
 label {
@@ -59,11 +55,8 @@ label {
   font-size: medium;
   padding-bottom: 0.5rem;
   margin-left: 10%;
-
-  @media (width <=500px) {
-    margin-left: 8%;
-    margin-right: 8%;
-  }
+  margin-left: 8%;
+  margin-right: 8%;
 }
 
 h2 {
@@ -71,11 +64,12 @@ h2 {
   font-family: Poppins, sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: x-large;
+  font-size: large;
+  margin-left: 3%;
 
-  @media (width <=500px) {
-    font-size: large;
-    margin-left: 3%;
+  @media (width >= 500px) {
+    font-size: x-large;
+    margin-left: 0%;
   }
 }
 
@@ -88,12 +82,12 @@ main {
 }
 
 body {
-  background: url('/images/sofi_stadium.jpeg') no-repeat center center/cover;
+  background: url('/images/duaLipa.jpg') no-repeat center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 
-  @media (width <=500px) {
-    background: url('/images/duaLipa.jpg') no-repeat center;
+  @media (width >= 500px) {
+    background: url('/images/sofi_stadium.jpeg') no-repeat center center/cover;
   }
 }
