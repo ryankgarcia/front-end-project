@@ -3,6 +3,10 @@
 .container {
   max-width: 800px;
   margin: 0 auto;
+
+  @media (width <=500px) {
+    width: 85%;
+  }
 }
 
 .row {
