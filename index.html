@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Front-End-Project</title>
+    <title>MyEventTicket</title>
     <link rel="icon" href="images/favicon.ico" />
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/layout.css" />
@@ -27,9 +27,9 @@
         </div>
       </div>
     </header>
-    <main>
-      <div class="overlay"></div>
-      <div id="main-page">
+    <main class="overlay">
+      <!-- <div class="overlay"></div> -->
+      <div data-view="main-page" id="main-page">
         <div class="row">
           <div class="column-full">
             <h2>Where are you looking for live events?</h2>
@@ -62,8 +62,21 @@
           </div>
         </form>
       </div>
-      <div id="results">
-        <ul id="items"></ul>
+      <div data-view="results" id="results" class="hidden">
+        <h2>Upcoming Events</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Name...</th>
+              <th class="mobileHidden">Date...</th>
+              <th class="mobileHidden">Venue...</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="items"></tbody>
+        </table>
+        <button class="button">Home</button>
+        <dialog></dialog>
       </div>
     </main>
     <script src="js/data.js"></script>
