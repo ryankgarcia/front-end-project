@@ -9,6 +9,10 @@
   }
 }
 
+.view-details {
+  display: block;
+}
+
 #results {
   background-color: white;
   border-radius: 10px;
@@ -178,12 +182,11 @@ dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.8);
 } */
 
-/*
 .modal-actions {
   display: flex;
   justify-content: center;
   margin: 2rem 0 1rem;
-} */
+}
 
 main {
   display: flex;

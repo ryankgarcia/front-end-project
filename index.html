@@ -20,8 +20,8 @@
         <div class="row">
           <div class="column-full">
             <h1>MyEventTicket</h1>
-            <div class="row-end">
-              <a>My Favorites</a>
+            <div data-view="favorites" class="row-end">
+              <a id="favorites">My Favorites</a>
             </div>
           </div>
         </div>
@@ -62,7 +62,6 @@
         </form>
       </div>
       <div data-view="results" id="results" class="hidden">
-        <!-- <dialog class="modal-actions view-button"> -->
         <h2 class="upcoming-events">Upcoming Events</h2>
         <table>
           <thead>
@@ -76,7 +75,7 @@
           <tbody id="items" class="table-rows"></tbody>
         </table>
         <button class="home-button">Home</button>
-        <!-- </dialog> -->
+        <!-- <dialog class="modal-actions"></dialog> -->
       </div>
     </main>
     <script src="js/data.js"></script>
