@@ -11,11 +11,8 @@ interface FormElements extends HTMLFormControlsCollection {
   keyword: HTMLInputElement;
 }
 
-// serialize the data to look like the interface above
-// the function i want to use is the map function
-// map function takes an array and returns a new array
-// to get the city look within the venues array to track where it is so that
-// you can get to it
+// each of these variables query the DOM for specific elements and will be used
+// to control what the user see's, dynamically changing the DOM tree
 
 const $locationInput = document.getElementById('location');
 const $keywordInput = document.getElementById('keyword');
@@ -23,6 +20,7 @@ const $form = document.querySelector('form');
 const $mainPageView = document.getElementById('main-page');
 const $results = document.getElementById('results');
 const $itemsId = document.getElementById('items');
+const $homeButton = document.querySelector('.home-button');
 
 if (!$locationInput) throw new Error('$locationInput query failed');
 if (!$keywordInput) throw new Error('$keywordInput query failed');
@@ -30,6 +28,10 @@ if (!$form) throw new Error('$form query failed');
 if (!$mainPageView) throw new Error('$mainPageView query failed');
 if (!$itemsId) throw new Error('$itemsId query failed');
 if (!$results) throw new Error('$results query failed');
+if (!$homeButton) throw new Error('$homeButton query failed');
+
+// the purpose of this async function is to call the API and get the necessary
+// data to show the user the events in their city based on a keyword search
 
 async function fetchEventData(city: string, keyword: string): Promise<void> {
   if (!$itemsId) throw new Error('$itemsId query failed');
@@ -51,16 +53,20 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
 
     const serializedEvents: Events[] = events.map((e) => ({
       name: e.name,
-      date: e.dates.start.localDate,
+      date: formatDate(e.dates.start.localDate),
       venue: e._embedded.venues[0].name,
       city: e._embedded.venues[0].city.name,
       startTime: e.dates.start.localTime,
     }));
     console.log('serialized events', serializedEvents);
 
+    // the for loop is iterating through all the available events and using the
+    // renderEntry function to show a list of available events
+
     for (let i = 0; i < serializedEvents.length; i++) {
       const $li = renderEntry(serializedEvents[i]);
       // console.log('li', $li);
+
       $itemsId.appendChild($li);
     }
     viewSwap('results');
@@ -79,7 +85,26 @@ $form.addEventListener('submit', (event: Event) => {
   // viewSwap('results');
 });
 
-// this information below should be to create the viewSwap functionality
+// made a home-button event listener to link the user back to the home page view
+
+$homeButton.addEventListener('click', () => {
+  const $formElements = $form.elements as FormElements;
+  if (!$formElements) throw new Error('$formElements query failed');
+  viewSwap('main-page');
+  $form.reset();
+});
+
+// created an event listener so when the user presses the View button
+// a modal will pop up with the details of the event that matches the Events interface
+
+// $viewButton.addEventListener('click', () => {
+//   const $formElements = $form.elements as FormElements;
+//   if (!$formElements) throw new Error('$formElements query failed');
+//   viewSwap('view-button');
+// });
+
+// the purpose of this function is to change the user's view from
+// the main-page view to the results view that will populate the events in their area
 
 function viewSwap(viewName: 'main-page' | 'results'): void {
   if (!$results || !$mainPageView)
@@ -93,17 +118,12 @@ function viewSwap(viewName: 'main-page' | 'results'): void {
   }
 }
 
-// for the renderEntry function below only keep what you need in order to do
-// the function call correctly. ask yourself what elements you want to make into
-// li elements and then append that to your DOM tree so that it updates for the user
-// dynamically
+// the purpose of the renderEntry function is to dynamically create table row elements
+// and add those to the DOM tree
 
 function renderEntry(event: Events): HTMLTableRowElement {
   const $tr = document.createElement('tr');
   // $tr.setAttribute('class', 'row');
-
-  // const $div = document.createElement('div');
-  // $div.setAttribute('class', 'column-full');
 
   const $td1 = document.createElement('td');
   $td1.textContent = event.name;
@@ -119,8 +139,8 @@ function renderEntry(event: Events): HTMLTableRowElement {
   const $button = document.createElement('button');
   $button.textContent = 'View';
   $button.setAttribute('class', 'view-button');
+  // $button.setAttribute('class', 'modal-actions');
 
-  // $tr.appendChild($div);
   $tr.appendChild($td1);
   $tr.appendChild($td2);
   $tr.appendChild($td3);
@@ -129,18 +149,29 @@ function renderEntry(event: Events): HTMLTableRowElement {
   return $tr;
 }
 
-// function renderEntry(fetchEventData: any): HTMLLIElement {
-//   const $liRow = document.createElement('li');
-//   $liRow.setAttribute('class', 'row');
+// created this function to have the date data display as a string with the
+// format 'Month Day, Year'
 
-//   const $divColFull = document.createElement('div');
-//   $divColFull.setAttribute('class', 'column-full');
+function formatDate(date: string): string {
+  const dateData = new Date(date);
+  const monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
-//   const $button = document.createElement('button');
-//   $button.setAttribute('type', 'submit');
+  const month = monthName[dateData.getMonth()];
+  const day = dateData.getDate();
+  const year = dateData.getFullYear();
 
-//   $liRow.appendChild($divColFull);
-//   $divColFull.appendChild($button);
-
-//   return $liRow;
-// }
+  return `${month} ${day}, ${year}`;
+}

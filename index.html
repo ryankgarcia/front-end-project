@@ -28,7 +28,6 @@
       </div>
     </header>
     <main class="overlay">
-      <!-- <div class="overlay"></div> -->
       <div data-view="main-page" id="main-page">
         <div class="row">
           <div class="column-full">
@@ -63,20 +62,21 @@
         </form>
       </div>
       <div data-view="results" id="results" class="hidden">
-        <h2>Upcoming Events</h2>
+        <!-- <dialog class="modal-actions view-button"> -->
+        <h2 class="upcoming-events">Upcoming Events</h2>
         <table>
           <thead>
             <tr>
-              <th>Name...</th>
-              <th class="mobileHidden">Date...</th>
-              <th class="mobileHidden">Venue...</th>
-              <th></th>
+              <th class="mobileHidden table-headers">Name...</th>
+              <th class="mobileHidden table-headers">Date...</th>
+              <th class="mobileHidden table-headers">Venue...</th>
+              <th class="table-headers"></th>
             </tr>
           </thead>
-          <tbody id="items"></tbody>
+          <tbody id="items" class="table-rows"></tbody>
         </table>
-        <button class="button">Home</button>
-        <dialog></dialog>
+        <button class="home-button">Home</button>
+        <!-- </dialog> -->
       </div>
     </main>
     <script src="js/data.js"></script>
