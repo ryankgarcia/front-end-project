@@ -9,7 +9,6 @@ interface Events {
 interface FormElements extends HTMLFormControlsCollection {
   location: HTMLInputElement;
   keyword: HTMLInputElement;
-  // view: HTMLButtonElement;
 }
 
 // each of these variables query the DOM for specific elements and will be used
@@ -22,6 +21,7 @@ const $mainPageView = document.getElementById('main-page');
 const $results = document.getElementById('results');
 const $itemsId = document.getElementById('items');
 const $homeButton = document.querySelector('.home-button');
+const $details = document.querySelector('.details');
 
 if (!$locationInput) throw new Error('$locationInput query failed');
 if (!$keywordInput) throw new Error('$keywordInput query failed');
@@ -30,15 +30,7 @@ if (!$mainPageView) throw new Error('$mainPageView query failed');
 if (!$itemsId) throw new Error('$itemsId query failed');
 if (!$results) throw new Error('$results query failed');
 if (!$homeButton) throw new Error('$homeButton query failed');
-
-// making 'space' for these DOM elements but i may need to delete them
-// if they don't have the correct functionality
-
-// const $viewButton = document.querySelector('.view-details');
-// if (!$viewButton) throw new Error('$viewButton query failed');
-
-// const $favorites = document.getElementById('#favorites');
-// if (!$favorites) throw new Error('$favorites query failed');
+if (!$details) throw new Error('$details query failed');
 
 // the purpose of this async function is to call the API and get the necessary
 // data to show the user the events in their city based on a keyword search
@@ -66,7 +58,10 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
       date: formatDate(e.dates.start.localDate),
       venue: e._embedded.venues[0].name,
       city: e._embedded.venues[0].city.name,
-      startTime: e.dates.start.localTime,
+      startTime: formatStartTime(
+        e.dates.start.localDate,
+        e.dates.start.localTime,
+      ),
     }));
     console.log('serialized events', serializedEvents);
 
@@ -75,10 +70,10 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
 
     for (let i = 0; i < serializedEvents.length; i++) {
       const $li = renderEntry(serializedEvents[i]);
-      // console.log('li', $li);
 
       $itemsId.appendChild($li);
     }
+
     viewSwap('results');
   } catch (error) {
     console.error('fetch failed!', error);
@@ -90,10 +85,6 @@ $form.addEventListener('submit', (event: Event) => {
   const $formElements = $form.elements as FormElements;
   if (!$formElements) throw new Error('$formElements query failed');
   fetchEventData($formElements.location.value, $formElements.keyword.value);
-  // $form.reset();
-
-  // if ()
-  // viewSwap('results');
 });
 
 // made a home-button event listener to link the user back to the home page view
@@ -105,67 +96,33 @@ $homeButton.addEventListener('click', () => {
   $form.reset();
 });
 
-// created a modal so when the user presses the View button
-// a modal will pop up with the details of the event that matches the Events interface
-
-// might need to create a pageSwap function to get to the favorites and view details pages
-
-// $viewButton.addEventListener('click', () => {
-//   const $formElements = $form.elements as FormElements;
-//   if (!$formElements) throw new Error('$formElements query failed');
-//   // viewSwap('view-details');
-// });
-
 // the purpose of this function is to change the user's view from
 // the main-page view to the results view that will populate the events in their area
 // this is the original function so keep it if the other messes up
 
-function viewSwap(viewName: 'main-page' | 'results'): void {
-  if (!$results || !$mainPageView)
+function viewSwap(viewName: 'main-page' | 'results' | 'details'): void {
+  if (!$results || !$mainPageView || !$details)
     throw new Error('$results or $mainPageView is null');
   if (viewName === 'main-page') {
     $mainPageView.classList.remove('hidden');
     $results.classList.add('hidden');
+    $details.classList.add('hidden');
   } else if (viewName === 'results') {
     $mainPageView.classList.add('hidden');
     $results.classList.remove('hidden');
+    $details.classList.add('hidden');
+  } else if (viewName === 'details') {
+    $mainPageView.classList.add('hidden');
+    $results.classList.add('hidden');
+    $details.classList.remove('hidden');
   }
 }
-
-// testing this one out to see if it will do what i want it to..
-
-// function viewSwap(
-//   viewName: 'main-page' | 'results' | 'favorites' | 'view-details',
-// ): void {
-//   const views = {
-//     'main-page': $mainPageView,
-//     results: $results,
-//     favorites: $favorites,
-//     'view-details': $viewButton,
-//   };
-
-//   if (
-//     !views['main-page'] ||
-//     !views.results ||
-//     !views.favorites ||
-//     !views['view-details']
-//   ) {
-//     throw new Error('One or more views is null');
-//   }
-
-//   Object.values(views).forEach((view) => view.classList.add('hidden'));
-
-//   views[viewName].classList.remove('hidden');
-
-//   console.log('switching to view:', `${viewName}`);
-// }
 
 // the purpose of the renderEntry function is to dynamically create table row elements
 // and add those to the DOM tree
 
 function renderEntry(event: Events): HTMLTableRowElement {
   const $tr = document.createElement('tr');
-  // $tr.setAttribute('class', 'row');
 
   const $td1 = document.createElement('td');
   $td1.textContent = event.name;
@@ -180,13 +137,13 @@ function renderEntry(event: Events): HTMLTableRowElement {
 
   const $button = document.createElement('button');
   $button.textContent = 'View';
-  $button.setAttribute('class', 'view-button');
+  $button.setAttribute('class', 'view-button details');
 
-  // this i might not keep
-  $button.setAttribute('class', 'view-button view-details');
-
-  // this i might not keep
-  // $button.setAttribute('class', 'modal-actions');
+  $button.addEventListener('click', () => {
+    console.log('running');
+    showEventDetails(event);
+    viewSwap('details');
+  });
 
   $tr.appendChild($td1);
   $tr.appendChild($td2);
@@ -194,6 +151,50 @@ function renderEntry(event: Events): HTMLTableRowElement {
   $tr.appendChild($button);
 
   return $tr;
+}
+
+// this function was created to show the details of each event when the user
+// presses the 'view' button created in the renderEntry function
+
+function showEventDetails(event: Events): void {
+  const $details = document.querySelector('.details');
+  if (!$details) throw new Error('$details query failed');
+  $details.innerHTML = ' ';
+
+  const $eventName = document.createElement('h2');
+  $eventName.textContent = event.name;
+  $eventName.setAttribute('class', 'h2');
+
+  const $eventDate = document.createElement('p');
+  $eventDate.textContent = `Date: ${event.date}`;
+  $eventName.setAttribute('class', 'p');
+
+  const $eventVenue = document.createElement('p');
+  $eventVenue.textContent = `Venue: ${event.venue}`;
+  $eventName.setAttribute('class', 'p');
+
+  const $eventCity = document.createElement('p');
+  $eventCity.textContent = `City: ${event.city}`;
+  $eventName.setAttribute('class', 'p');
+
+  const $eventTime = document.createElement('p');
+  $eventTime.textContent = `Start Time: ${event.startTime}`;
+  $eventName.setAttribute('class', 'p');
+
+  const $closeButton = document.createElement('button');
+  $closeButton.textContent = 'Close';
+  $closeButton.setAttribute('class', 'button');
+
+  $closeButton.addEventListener('click', () => {
+    viewSwap('results');
+  });
+
+  $details.appendChild($eventName);
+  $details.appendChild($eventDate);
+  $details.appendChild($eventVenue);
+  $details.appendChild($eventCity);
+  $details.appendChild($eventTime);
+  $details.appendChild($closeButton);
 }
 
 // created this function to have the date data display as a string with the
@@ -221,4 +222,28 @@ function formatDate(date: string): string {
   const year = dateData.getFullYear();
 
   return `${month} ${day}, ${year}`;
+}
+
+function formatStartTime(dateStr: string, timeStr: string): string {
+  const date = new Date(`${dateStr}T${timeStr}`);
+
+  // Days of the week array
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  const dayName = days[date.getDay()]; // Get full weekday name
+
+  // Extract hours and AM/PM format
+  let hours = date.getHours();
+  const minutes = date.getMinutes() === 0 ? '' : `:${date.getMinutes()}`;
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12; // Convert to 12-hour format
+
+  return `${dayName} @${hours}${minutes}${ampm}`;
 }
