@@ -45,7 +45,6 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
     if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
 
     const data = await response.json();
-    console.log('data', data);
 
     if (!data._embedded) {
       alert('You typed in an invalid keyword');
@@ -63,14 +62,12 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
         e.dates.start.localTime,
       ),
     }));
-    console.log('serialized events', serializedEvents);
 
     // the for loop is iterating through all the available events and using the
     // renderEntry function to show a list of available events
 
     for (let i = 0; i < serializedEvents.length; i++) {
       const $li = renderEntry(serializedEvents[i]);
-
       $itemsId.appendChild($li);
     }
 
@@ -140,7 +137,6 @@ function renderEntry(event: Events): HTMLTableRowElement {
   $button.setAttribute('class', 'view-button details');
 
   $button.addEventListener('click', () => {
-    console.log('running');
     showEventDetails(event);
     viewSwap('details');
   });
@@ -163,7 +159,7 @@ function showEventDetails(event: Events): void {
 
   const $eventName = document.createElement('h2');
   $eventName.textContent = event.name;
-  $eventName.setAttribute('class', 'h2');
+  $eventName.setAttribute('class', 'upcoming-events');
 
   const $eventDate = document.createElement('p');
   $eventDate.textContent = `Date: ${event.date}`;
@@ -224,10 +220,12 @@ function formatDate(date: string): string {
   return `${month} ${day}, ${year}`;
 }
 
-function formatStartTime(dateStr: string, timeStr: string): string {
-  const date = new Date(`${dateStr}T${timeStr}`);
+// created this function to have the start time data display as a string with
+// the format 'Day @Time ampm'
 
-  // Days of the week array
+function formatStartTime(dateStr: string, timeStr: string): string {
+  const date = new Date(`${dateStr} ${timeStr}`);
+
   const days = [
     'Sunday',
     'Monday',
@@ -237,7 +235,7 @@ function formatStartTime(dateStr: string, timeStr: string): string {
     'Friday',
     'Saturday',
   ];
-  const dayName = days[date.getDay()]; // Get full weekday name
+  const dayName = days[date.getDay()];
 
   // Extract hours and AM/PM format
   let hours = date.getHours();
