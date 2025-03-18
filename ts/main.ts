@@ -161,21 +161,37 @@ function showEventDetails(event: Events): void {
   $eventName.textContent = event.name;
   $eventName.setAttribute('class', 'upcoming-events');
 
-  const $eventDate = document.createElement('p');
-  $eventDate.textContent = `Date: ${event.date}`;
-  $eventName.setAttribute('class', 'p');
+  const $dateDiv = document.createElement('div');
+  $dateDiv.setAttribute('class', 'row-span');
+  const $eventDate = document.createElement('span');
+  const $spanDate = document.createElement('span');
+  $eventDate.textContent = `Date:`;
+  $spanDate.setAttribute('class', 'float-right');
+  $spanDate.textContent = `${event.date}`;
 
-  const $eventVenue = document.createElement('p');
-  $eventVenue.textContent = `Venue: ${event.venue}`;
-  $eventName.setAttribute('class', 'p');
+  const $venueDiv = document.createElement('div');
+  $venueDiv.setAttribute('class', 'row-span');
+  const $eventVenue = document.createElement('span');
+  const $spanVenue = document.createElement('span');
+  $eventVenue.textContent = `Venue:`;
+  $spanVenue.setAttribute('class', 'float-right');
+  $spanVenue.textContent = `${event.venue}`;
 
-  const $eventCity = document.createElement('p');
-  $eventCity.textContent = `City: ${event.city}`;
-  $eventName.setAttribute('class', 'p');
+  const $cityDiv = document.createElement('div');
+  $cityDiv.setAttribute('class', 'row-span');
+  const $eventCity = document.createElement('span');
+  const $spanCity = document.createElement('span');
+  $eventCity.textContent = `City:`;
+  $spanCity.setAttribute('class', 'float-right');
+  $spanCity.textContent = `${event.city}`;
 
-  const $eventTime = document.createElement('p');
-  $eventTime.textContent = `Start Time: ${event.startTime}`;
-  $eventName.setAttribute('class', 'p');
+  const $timeDiv = document.createElement('div');
+  $timeDiv.setAttribute('class', 'row-span');
+  const $eventTime = document.createElement('span');
+  const $spanTime = document.createElement('span');
+  $eventTime.textContent = `Start Time:`;
+  $spanTime.setAttribute('class', 'float-right');
+  $spanTime.textContent = `${event.startTime}`;
 
   const $closeButton = document.createElement('button');
   $closeButton.textContent = 'Close';
@@ -186,10 +202,18 @@ function showEventDetails(event: Events): void {
   });
 
   $details.appendChild($eventName);
-  $details.appendChild($eventDate);
-  $details.appendChild($eventVenue);
-  $details.appendChild($eventCity);
-  $details.appendChild($eventTime);
+  $dateDiv.appendChild($eventDate);
+  $dateDiv.appendChild($spanDate);
+  $venueDiv.appendChild($eventVenue);
+  $venueDiv.appendChild($spanVenue);
+  $cityDiv.appendChild($eventCity);
+  $cityDiv.appendChild($spanCity);
+  $timeDiv.appendChild($eventTime);
+  $timeDiv.appendChild($spanTime);
+  $details.appendChild($dateDiv);
+  $details.appendChild($venueDiv);
+  $details.appendChild($cityDiv);
+  $details.appendChild($timeDiv);
   $details.appendChild($closeButton);
 }
 

@@ -18,6 +18,17 @@
   padding: 1rem;
 }
 
+.float-right {
+  float: right;
+  max-width: 200px;
+  overflow-wrap: break-word;
+  text-align: right;
+}
+
+span {
+  font-size: 1.1rem;
+}
+
 .upcoming-events {
   display: block;
   text-align: center;
@@ -101,22 +112,22 @@ p {
   .view-button:hover {
     transition: all 0.5s ease;
     transform: scale(1.2);
-    background-color: #6a27e0;
-    color: white;
+    background-color: peachpuff;
+    color: black;
   }
 
   .button:hover {
     transition: all 0.3s ease;
     transform: scale(1.2);
-    background-color: peachpuff;
-    color: black;
+    background-color: #6a27e0;
+    color: white;
   }
 
   .home-button:hover {
     transition: all 0.5s ease;
     transform: scale(1.2);
-    background-color: #6a27e0;
-    color: white;
+    background-color: limegreen;
+    color: black;
   }
 }
 
@@ -225,6 +236,7 @@ main {
 
 body {
   background: url('/images/duaLipa.jpg') no-repeat center;
+  background-color: black;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
