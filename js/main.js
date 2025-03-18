@@ -9,6 +9,7 @@ const $results = document.getElementById('results');
 const $itemsId = document.getElementById('items');
 const $homeButton = document.querySelector('.home-button');
 const $details = document.querySelector('.details');
+const $favorites = document.querySelector('.favorites-view');
 if (!$locationInput) throw new Error('$locationInput query failed');
 if (!$keywordInput) throw new Error('$keywordInput query failed');
 if (!$form) throw new Error('$form query failed');
@@ -17,6 +18,7 @@ if (!$itemsId) throw new Error('$itemsId query failed');
 if (!$results) throw new Error('$results query failed');
 if (!$homeButton) throw new Error('$homeButton query failed');
 if (!$details) throw new Error('$details query failed');
+if (!$favorites) throw new Error('$favorites query failed');
 // the purpose of this async function is to call the API and get the necessary
 // data to show the user the events in their city based on a keyword search
 async function fetchEventData(city, keyword) {
@@ -57,6 +59,7 @@ $form.addEventListener('submit', (event) => {
   event.preventDefault();
   const $formElements = $form.elements;
   if (!$formElements) throw new Error('$formElements query failed');
+  console.log('running');
   fetchEventData($formElements.location.value, $formElements.keyword.value);
 });
 // made a home-button event listener to link the user back to the home page view
@@ -67,23 +70,31 @@ $homeButton.addEventListener('click', () => {
   $form.reset();
 });
 // the purpose of this function is to change the user's view from
-// the main-page view to the results view that will populate the events in their area
-// this is the original function so keep it if the other messes up
+// the main-page view to the results view that will populate the events in
+// their area
 function viewSwap(viewName) {
-  if (!$results || !$mainPageView || !$details)
-    throw new Error('$results or $mainPageView is null');
+  if (!$results || !$mainPageView || !$details || !$favorites)
+    throw new Error('$results, $mainPageView, $details, or $favorites is null');
   if (viewName === 'main-page') {
     $mainPageView.classList.remove('hidden');
     $results.classList.add('hidden');
     $details.classList.add('hidden');
+    $favorites.classList.add('hidden');
   } else if (viewName === 'results') {
     $mainPageView.classList.add('hidden');
     $results.classList.remove('hidden');
     $details.classList.add('hidden');
+    $favorites.classList.add('hidden');
   } else if (viewName === 'details') {
     $mainPageView.classList.add('hidden');
     $results.classList.add('hidden');
     $details.classList.remove('hidden');
+    $favorites.classList.add('hidden');
+  } else if (viewName === 'favorites-view') {
+    $mainPageView.classList.add('hidden');
+    $results.classList.add('hidden');
+    $details.classList.add('hidden');
+    $favorites.classList.remove('hidden');
   }
 }
 // the purpose of the renderEntry function is to dynamically create table row elements
@@ -148,11 +159,35 @@ function showEventDetails(event) {
   $eventTime.textContent = `Start Time:`;
   $spanTime.setAttribute('class', 'float-right');
   $spanTime.textContent = `${event.startTime}`;
+  const $closeDiv = document.createElement('div');
+  $closeDiv.setAttribute('class', 'test-span');
   const $closeButton = document.createElement('button');
   $closeButton.textContent = 'Close';
-  $closeButton.setAttribute('class', 'button');
+  $closeButton.setAttribute('class', 'button button-span');
+  // the closeButton event listener was added here in order to monitor the click
+  // of the user and send them back to the results page if they want to look
+  // at other events
   $closeButton.addEventListener('click', () => {
     viewSwap('results');
+  });
+  // might need to create this variable globally so it can be accessed in other
+  // parts of the app
+  const $favoritesDiv = document.createElement('div');
+  $favoritesDiv.setAttribute('class', 'test-span');
+  const $addFavoritesButton = document.createElement('button');
+  $addFavoritesButton.textContent = 'Add to Favorites';
+  $addFavoritesButton.setAttribute('class', 'button button-span');
+  // the addFavorites event listener will be needed to listen for click events
+  // to viewSwap the user to the favorites page. think about making this a global
+  // variable so that the user can be linked to the favorites page no matter
+  // which 'view' they are currently on. be sure to include that logic in your
+  // viewSwap function..and possibly the function you will need to create to view
+  // the user's favorites
+  $addFavoritesButton.addEventListener('click', () => {
+    console.log('got to favorites!!');
+    viewSwap('favorites-view'); // think about taking the viewSwap out and instead just call the function that will add the event to user favorites
+    renderEntry(event);
+    showEventDetails(event);
   });
   $details.appendChild($eventName);
   $dateDiv.appendChild($eventDate);
@@ -167,8 +202,17 @@ function showEventDetails(event) {
   $details.appendChild($venueDiv);
   $details.appendChild($cityDiv);
   $details.appendChild($timeDiv);
-  $details.appendChild($closeButton);
+  $details.appendChild($closeDiv);
+  $closeDiv.appendChild($closeButton);
+  $details.appendChild($favoritesDiv);
+  $favoritesDiv.appendChild($addFavoritesButton);
 }
+// showUserFavorites function was created to show the user's favorites
+// when the user presses 'add to favorites' the view will not swap, only add
+// the event to an empty array in the data.ts which will also utilize localStorage
+// the user can then chose to press 'My favorites' from any screen which
+// will then take the user to that screen if they choose
+// function showUserFavorites(event: Events): void {}
 // created this function to have the date data display as a string with the
 // format 'Month Day, Year'
 function formatDate(date) {

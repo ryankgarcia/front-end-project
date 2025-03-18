@@ -18,6 +18,34 @@
   margin-bottom: 16px;
 }
 
+/* .close-button-span {
+  display: flex;
+  justify-content: space-around;
+  width: calc(200% / 3);
+} */
+
+.test-span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+
+  /* max-width: 200px; */
+
+  /* width: 100%; */
+}
+
+.button-span {
+  /* Each span takes equal space */
+
+  /* Limit their max size if needed */
+
+  /* text-align: center; Center text inside the spans */
+  background-color: lightblue;
+  padding: 10px;
+  margin: 5px;
+}
+
 .row-end {
   display: flex;
   flex-direction: row-reverse;
