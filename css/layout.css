@@ -1,9 +1,5 @@
 /* CSS grid classes here, AND any layout-related media queries */
 
-/* after lunch change the media queries so they're mobile FIRST then account for desktop */
-
-/* instead of width <=500px change to >=500px and then the changes you want to make */
-
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -14,19 +10,21 @@
   display: flex;
 }
 
+.row-span {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
 .row-end {
   display: flex;
   flex-direction: row-reverse;
 }
 
 .overlay {
-  background-color: white;
-  opacity: 0.7;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  z-index: -1;
-  top: 0;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .column-full {
