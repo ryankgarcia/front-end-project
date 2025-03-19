@@ -165,12 +165,45 @@ function renderEntry(event: Events): HTMLTableRowElement {
 }
 
 // the favoritesButton event listener is going to be used to swap the view for the
-// user to their favorites list
+// user to their favorites list. that is the only purpose it will serve
 
 $favoritesButton.addEventListener('click', () => {
-  writeFavorites();
+  const favorites = readFavorites();
+  $favorites.innerHTML = '';
+
+  favorites.forEach((event) => {
+    const $li = renderEntry(event);
+    $favorites.appendChild($li);
+  });
+
   viewSwap('favorites-view');
 });
+
+// might need to delete this function below. rn using it for testing
+interface Favorites {
+  view: string;
+  favorites: Events[];
+  editing: null;
+  nextEntryId: number;
+}
+
+// const favoritesData: Favorites = readFavorites();
+// const favoritesData: Favorites = Events[]
+
+function writeFavorites(event: Events): void {
+  const favoritesStorage = localStorage.setItem(
+    'favorites-storage',
+    JSON.stringify(event),
+  );
+  const favorites = JSON.parse(favoritesStorage);
+
+  favorites.push(event);
+}
+
+function readFavorites(): Events[] {
+  const favoritesStorage = localStorage.getItem('favorites-storage');
+  return favoritesStorage;
+}
 
 // this function was created to show the details of each event when the user
 // presses the 'view' button created in the renderEntry function
@@ -238,18 +271,13 @@ function showEventDetails(event: Events): void {
   $addFavoritesButton.setAttribute('class', 'favorites-button button-span');
 
   // the addFavorites event listener will be needed to listen for click events
-  // to viewSwap the user to the favorites page. think about making this a global
-  // variable so that the user can be linked to the favorites page no matter
-  // which 'view' they are currently on. be sure to include that logic in your
-  // viewSwap function..and possibly the function you will need to create to view
-  // the user's favorites
+  // and push the current entry into local storage data. it should utilize a
+  // write favorites function
 
   $addFavoritesButton.addEventListener('click', () => {
-    renderEntry(event);
-    writeFavorites();
+    writeFavorites(event);
     console.log('add to favorites function goes here!!');
-    // addToFavorites(event);
-    // writeFavorites();
+
     // right here i will need to add the linkage to data.ts to send this data to local storage
     // think about taking the viewSwap out and instead just call the function that will add the event to user favorites
     // one of these calls has to be add to favorites which will take the click of the current entry and store it to local storage
@@ -272,12 +300,6 @@ function showEventDetails(event: Events): void {
   $closeDiv.appendChild($closeButton);
   $closeDiv.appendChild($addFavoritesButton);
 }
-
-// showUserFavorites function was created to show the user's favorites
-// when the user presses 'add to favorites' the view will not swap, only add
-// the event to an empty array in the data.ts which will also utilize localStorage
-// the user can then chose to press 'My favorites' from any screen which
-// will then take the user to that screen if they choose
 
 // created this function to have the date data display as a string with the
 // format 'Month Day, Year'
@@ -331,3 +353,15 @@ function formatStartTime(dateStr: string, timeStr: string): string {
 
   return `${dayName} @${hours}${minutes}${ampm}`;
 }
+
+// the $header event listener serves to redirect me back to the main-page view
+// when while i build out the functionality of my favorites view
+
+const $header = document.querySelector('h1');
+if (!$header) throw new Error('$header query failed');
+$header.addEventListener('click', () => {
+  const $formElements = $form.elements as FormElements;
+  if (!$formElements) throw new Error('$formElements query failed');
+  viewSwap('main-page');
+  $form.reset();
+});
