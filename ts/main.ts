@@ -168,42 +168,9 @@ function renderEntry(event: Events): HTMLTableRowElement {
 // user to their favorites list. that is the only purpose it will serve
 
 $favoritesButton.addEventListener('click', () => {
-  const favorites = readFavorites();
-  $favorites.innerHTML = '';
-
-  favorites.forEach((event) => {
-    const $li = renderEntry(event);
-    $favorites.appendChild($li);
-  });
-
   viewSwap('favorites-view');
+  // readFavorites();
 });
-
-// might need to delete this function below. rn using it for testing
-interface Favorites {
-  view: string;
-  favorites: Events[];
-  editing: null;
-  nextEntryId: number;
-}
-
-// const favoritesData: Favorites = readFavorites();
-// const favoritesData: Favorites = Events[]
-
-function writeFavorites(event: Events): void {
-  const favoritesStorage = localStorage.setItem(
-    'favorites-storage',
-    JSON.stringify(event),
-  );
-  const favorites = JSON.parse(favoritesStorage);
-
-  favorites.push(event);
-}
-
-function readFavorites(): Events[] {
-  const favoritesStorage = localStorage.getItem('favorites-storage');
-  return favoritesStorage;
-}
 
 // this function was created to show the details of each event when the user
 // presses the 'view' button created in the renderEntry function
@@ -271,16 +238,35 @@ function showEventDetails(event: Events): void {
   $addFavoritesButton.setAttribute('class', 'favorites-button button-span');
 
   // the addFavorites event listener will be needed to listen for click events
-  // and push the current entry into local storage data. it should utilize a
-  // write favorites function
+  // and push the current entry into local storage data and the user's favorites page.
+  // it should utilize a write favorites function to write that entry to the local storage
+
+  const $ul = document.getElementById('favorites-list') as HTMLUListElement;
+  if (!$ul) throw new Error('$ul query failed');
 
   $addFavoritesButton.addEventListener('click', () => {
-    writeFavorites(event);
-    console.log('add to favorites function goes here!!');
+    // this
+    const $deleteDiv = document.createElement('div');
+    const $spanDelete = document.createElement('span');
+    const $deleteFavorite = document.createElement('button');
+    $deleteFavorite.textContent = 'Delete';
+    $spanDelete.setAttribute('class', 'float-right');
+    $deleteFavorite.setAttribute('class', 'delete-button button-span');
+    $ul.appendChild($deleteDiv);
+    $deleteDiv.appendChild($spanDelete);
+    $spanDelete.appendChild($deleteFavorite);
 
-    // right here i will need to add the linkage to data.ts to send this data to local storage
-    // think about taking the viewSwap out and instead just call the function that will add the event to user favorites
-    // one of these calls has to be add to favorites which will take the click of the current entry and store it to local storage
+    for (let i = 0; i < renderEntry.length; i++) {
+      const $li = renderEntry(event);
+      $ul.appendChild($li);
+      writeFavorites();
+      console.log('add to favorites function goes here!!');
+    }
+
+    $deleteFavorite.addEventListener('click', () => {
+      // localStorage.removeItem($ul[$renderEntry]);
+      console.log('is this working??');
+    });
   });
 
   $details.appendChild($eventName);
