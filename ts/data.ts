@@ -7,24 +7,21 @@ interface Favorites {
   city: string;
   venue: string;
   startTime: string;
-  // favorites?: Events[];
 }
 
-// const favorites: Favorites[] = readFavorites();
+const favorites: Favorites[] = [];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function writeFavorites(): void {
-  const favoritesJSON = JSON.stringify(renderEntry);
+  const favoritesJSON = JSON.stringify(favorites);
   localStorage.setItem('favorites-storage', favoritesJSON);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function readFavorites(): Favorites[] {
   const favoritesStorage = localStorage.getItem('favorites-storage');
   if (favoritesStorage) {
     const json = JSON.parse(favoritesStorage);
     return json;
   } else {
-    return favoritesStorage ? JSON.parse(favoritesStorage) : [];
+    return [];
   }
 }

@@ -245,7 +245,6 @@ function showEventDetails(event: Events): void {
   if (!$ul) throw new Error('$ul query failed');
 
   $addFavoritesButton.addEventListener('click', () => {
-    // this
     const $deleteDiv = document.createElement('div');
     const $spanDelete = document.createElement('span');
     const $deleteFavorite = document.createElement('button');
@@ -256,12 +255,14 @@ function showEventDetails(event: Events): void {
     $deleteDiv.appendChild($spanDelete);
     $spanDelete.appendChild($deleteFavorite);
 
-    for (let i = 0; i < renderEntry.length; i++) {
-      const $li = renderEntry(event);
-      $ul.appendChild($li);
-      writeFavorites();
-      console.log('add to favorites function goes here!!');
-    }
+    const $li = renderEntry(event);
+
+    favorites.unshift(event);
+    writeFavorites();
+    $ul.appendChild($li);
+
+    console.log('add to favorites function goes here!!');
+    // }
 
     $deleteFavorite.addEventListener('click', () => {
       // localStorage.removeItem($ul[$renderEntry]);
