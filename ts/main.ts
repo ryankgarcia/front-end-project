@@ -23,6 +23,7 @@ const $itemsId = document.getElementById('items');
 const $homeButton = document.querySelector('.home-button');
 const $details = document.querySelector('.details');
 const $favorites = document.querySelector('.favorites-view');
+const $favoritesButton = document.getElementById('favorites-button');
 
 if (!$locationInput) throw new Error('$locationInput query failed');
 if (!$keywordInput) throw new Error('$keywordInput query failed');
@@ -33,6 +34,7 @@ if (!$results) throw new Error('$results query failed');
 if (!$homeButton) throw new Error('$homeButton query failed');
 if (!$details) throw new Error('$details query failed');
 if (!$favorites) throw new Error('$favorites query failed');
+if (!$favoritesButton) throw new Error('$favoritesButton query failed');
 
 // the purpose of this async function is to call the API and get the necessary
 // data to show the user the events in their city based on a keyword search
@@ -162,6 +164,14 @@ function renderEntry(event: Events): HTMLTableRowElement {
   return $tr;
 }
 
+// the favoritesButton event listener is going to be used to swap the view for the
+// user to their favorites list
+
+$favoritesButton.addEventListener('click', () => {
+  writeFavorites();
+  viewSwap('favorites-view');
+});
+
 // this function was created to show the details of each event when the user
 // presses the 'view' button created in the renderEntry function
 
@@ -207,7 +217,7 @@ function showEventDetails(event: Events): void {
   $spanTime.textContent = `${event.startTime}`;
 
   const $closeDiv = document.createElement('div');
-  $closeDiv.setAttribute('class', 'test-span');
+  $closeDiv.setAttribute('class', 'button-container');
   const $closeButton = document.createElement('button');
   $closeButton.textContent = 'Close';
   $closeButton.setAttribute('class', 'button button-span');
@@ -223,11 +233,9 @@ function showEventDetails(event: Events): void {
   // might need to create this variable globally so it can be accessed in other
   // parts of the app
 
-  const $favoritesDiv = document.createElement('div');
-  $favoritesDiv.setAttribute('class', 'test-span');
   const $addFavoritesButton = document.createElement('button');
   $addFavoritesButton.textContent = 'Add to Favorites';
-  $addFavoritesButton.setAttribute('class', 'button button-span');
+  $addFavoritesButton.setAttribute('class', 'favorites-button button-span');
 
   // the addFavorites event listener will be needed to listen for click events
   // to viewSwap the user to the favorites page. think about making this a global
@@ -237,10 +245,14 @@ function showEventDetails(event: Events): void {
   // the user's favorites
 
   $addFavoritesButton.addEventListener('click', () => {
-    console.log('got to favorites!!');
-    viewSwap('favorites-view'); // think about taking the viewSwap out and instead just call the function that will add the event to user favorites
     renderEntry(event);
-    showEventDetails(event);
+    writeFavorites();
+    console.log('add to favorites function goes here!!');
+    // addToFavorites(event);
+    // writeFavorites();
+    // right here i will need to add the linkage to data.ts to send this data to local storage
+    // think about taking the viewSwap out and instead just call the function that will add the event to user favorites
+    // one of these calls has to be add to favorites which will take the click of the current entry and store it to local storage
   });
 
   $details.appendChild($eventName);
@@ -258,8 +270,7 @@ function showEventDetails(event: Events): void {
   $details.appendChild($timeDiv);
   $details.appendChild($closeDiv);
   $closeDiv.appendChild($closeButton);
-  $details.appendChild($favoritesDiv);
-  $favoritesDiv.appendChild($addFavoritesButton);
+  $closeDiv.appendChild($addFavoritesButton);
 }
 
 // showUserFavorites function was created to show the user's favorites
@@ -267,8 +278,6 @@ function showEventDetails(event: Events): void {
 // the event to an empty array in the data.ts which will also utilize localStorage
 // the user can then chose to press 'My favorites' from any screen which
 // will then take the user to that screen if they choose
-
-// function showUserFavorites(event: Events): void {}
 
 // created this function to have the date data display as a string with the
 // format 'Month Day, Year'

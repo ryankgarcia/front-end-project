@@ -82,7 +82,8 @@ p {
 }
 
 .button,
-.home-button {
+.home-button,
+.favorites-button {
   display: block;
   margin: 0 auto;
   color: white;
@@ -121,6 +122,7 @@ p {
     transform: scale(1.2);
     background-color: #6a27e0;
     color: white;
+    font-size: 16px;
   }
 
   .home-button:hover {
@@ -128,6 +130,16 @@ p {
     transform: scale(1.2);
     background-color: limegreen;
     color: black;
+    font-size: 16px;
+  }
+
+  .favorites-button:hover {
+    transition: all 0.3s ease;
+    transform: scale(1.2);
+    background-color: #cc4ba5;
+    color: whitesmoke;
+
+    /* font-size: 16px; */
   }
 }
 
