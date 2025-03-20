@@ -4,6 +4,7 @@ interface Events {
   city: string;
   venue: string;
   startTime: string;
+  id: string;
 }
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -67,6 +68,7 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
         e.dates.start.localDate,
         e.dates.start.localTime,
       ),
+      id: e.id,
     }));
 
     // the for loop is iterating through all the available events and using the
@@ -170,7 +172,7 @@ function renderEntry(event: Events): HTMLTableRowElement {
 // user to their favorites list. that is the only purpose it will serve
 
 $favoritesButton.addEventListener('click', () => {
-  readFavorites();
+  readFavorites(); // need to keep this in
   viewSwap('favorites-view');
   if ($noFavorites) {
     toggleNoFavorites();
@@ -274,8 +276,10 @@ function showEventDetails(event: Events): void {
 
     const $li = renderEntry(event);
 
-    favorites.unshift(event);
+    favorites.unshift(event); // this is correct leave it in
+
     writeFavorites(); // this is correct leave it in
+
     $ul.appendChild($li);
 
     // delete favorites event listener goes here

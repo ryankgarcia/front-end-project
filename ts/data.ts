@@ -7,7 +7,9 @@ interface Favorites {
   city: string;
   venue: string;
   startTime: string;
+  id: string;
 }
+
 // DO NOT ERASE THIS CODE
 const favorites: Favorites[] = [];
 
@@ -25,6 +27,32 @@ function readFavorites(): Favorites[] {
     return [];
   }
 }
+// DO NOT ERASE THIS CODE UPWARD. IT WORKS!
+
+// testing this code downward
+
+// interface User {
+//   id: number;
+//   name: string;
+// }
+
+// interface Product {
+//   id: number;
+//   name: string;
+//   price: number;
+// }
+
+// const users: User[] = [
+//   { id: 1, name: 'John' },
+//   { id: 2, name: 'Jane' },
+//   { id: 3, name: 'Bob' },
+// ];
+
+// const duplicates = favorites.find((e) => e.date === e.name);
+// console.log('duplicates:', duplicates);
+
+// testing this code up ward
+
 // DO NOT ERASE FROM HERE UP TO THE OTHER 'DO NOT ERASE' MESSAGE
 
 // testing this code out but it does not stop another entry from showing
