@@ -194,8 +194,6 @@ function showEventDetails(event) {
   $closeButton.addEventListener('click', () => {
     viewSwap('results');
   });
-  // might need to create this variable globally so it can be accessed in other
-  // parts of the app
   const $addFavoritesButton = document.createElement('button');
   $addFavoritesButton.textContent = 'Add to Favorites';
   $addFavoritesButton.setAttribute('class', 'favorites-button button-span');
@@ -205,38 +203,23 @@ function showEventDetails(event) {
   // and push the current entry into local storage data and the user's favorites page.
   // it should utilize a write favorites function to write that entry to the local storage
   $addFavoritesButton.addEventListener('click', () => {
-    const $deleteDiv = document.createElement('div');
-    const $spanDelete = document.createElement('span');
-    const $deleteFavorite = document.createElement('button');
-    $deleteFavorite.textContent = 'Delete';
-    $spanDelete.setAttribute('class', 'float-right');
-    $deleteFavorite.setAttribute('class', 'delete-button button-span');
-    $ul.appendChild($deleteDiv);
-    $deleteDiv.appendChild($spanDelete);
-    $spanDelete.appendChild($deleteFavorite);
-    const $li = renderEntry(event); // this works
-    // for (let i = 0; i < favorites.length; i++) {
-    //   favorites.find((value, i) => {
-    //     if (favorites[i] === event) {
-    //       delete favorites[value];
-    //     } else {
-    //       favorites.unshift(event);
-    //     }
-    //   });
-    // }
-    // for (let i = 0; i < favorites.length; i++) {
-    //   if (favorites[i] === event) {
-    //     favorites.splice(i, 1);
-    //     break;
-    //   }
-    // }
-    // if (!favorites.includes(event)) {
-    //   favorites.unshift(event);
-    // }
-    favorites.unshift(event); // this is correct leave it in
-    writeFavorites(); // this is correct leave it in
-    $ul.appendChild($li); // this is correct leave it in
-    // delete favorites event listener goes here
+    const check4Duplicates = favorites.find((value) => value.id === event.id);
+    if (!check4Duplicates) {
+      favorites.unshift(event);
+      writeFavorites();
+      const $li = renderEntry(event);
+      const $deleteDiv = document.createElement('div');
+      const $spanDelete = document.createElement('span');
+      const $deleteFavorite = document.createElement('button');
+      $deleteFavorite.textContent = 'Delete';
+      // made changes to the spanDelete set attribute - class name
+      $spanDelete.setAttribute('class', 'float-under');
+      $deleteFavorite.setAttribute('class', 'delete-button button-span');
+      $ul.appendChild($deleteDiv);
+      $deleteDiv.appendChild($spanDelete);
+      $spanDelete.appendChild($deleteFavorite);
+      $ul.appendChild($li);
+    }
   });
   $details.appendChild($eventName);
   $dateDiv.appendChild($eventDate);
