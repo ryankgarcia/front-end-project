@@ -172,7 +172,7 @@ function renderEntry(event: Events): HTMLTableRowElement {
 // user to their favorites list. that is the only purpose it will serve
 
 $favoritesButton.addEventListener('click', () => {
-  readFavorites(); // need to keep this in
+  // readFavorites(); // need to keep this in
   viewSwap('favorites-view');
   if ($noFavorites) {
     toggleNoFavorites();
@@ -274,13 +274,33 @@ function showEventDetails(event: Events): void {
     $deleteDiv.appendChild($spanDelete);
     $spanDelete.appendChild($deleteFavorite);
 
-    const $li = renderEntry(event);
+    const $li = renderEntry(event); // this works
+
+    // for (let i = 0; i < favorites.length; i++) {
+    //   favorites.find((value, i) => {
+    //     if (favorites[i] === event) {
+    //       delete favorites[value];
+    //     } else {
+    //       favorites.unshift(event);
+    //     }
+    //   });
+    // }
+    // for (let i = 0; i < favorites.length; i++) {
+    //   if (favorites[i] === event) {
+    //     favorites.splice(i, 1);
+    //     break;
+    //   }
+    // }
+
+    // if (!favorites.includes(event)) {
+    //   favorites.unshift(event);
+    // }
 
     favorites.unshift(event); // this is correct leave it in
 
     writeFavorites(); // this is correct leave it in
 
-    $ul.appendChild($li);
+    $ul.appendChild($li); // this is correct leave it in
 
     // delete favorites event listener goes here
   });
