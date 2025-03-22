@@ -1,7 +1,7 @@
 'use strict';
 /* exported data */
 // this is where you will be putting your data model and saving it to localStorage if necessary //
-const favorites = [];
+const favorites = readFavorites();
 function writeFavorites() {
   const favoritesJSON = JSON.stringify(favorites);
   localStorage.setItem('favorites-storage', favoritesJSON);

@@ -10,7 +10,7 @@ interface Favorites {
   id: string;
 }
 
-const favorites: Favorites[] = [];
+const favorites: Favorites[] = readFavorites();
 
 function writeFavorites(): void {
   const favoritesJSON = JSON.stringify(favorites);

@@ -23,10 +23,12 @@ const $results = document.getElementById('results');
 const $itemsId = document.getElementById('items');
 const $homeButton = document.querySelector('.home-button');
 const $details = document.querySelector('.details');
-const $favorites = document.querySelector('.favorites-view');
-const $favoritesButton = document.getElementById('favorites-button');
+const $favorites = document.querySelector('.favorites-view'); // viewSwap
+const $favoritesButton = document.getElementById('favorites-button'); // add to favorites
 const $noFavorites = document.querySelector('.no-favorites'); // this shows or hides 'no favorites exist text'
 const $favoritesHome = document.querySelector('.favorites-home-button');
+const $header = document.querySelector('h1');
+const $ul = document.getElementById('favorites-list') as HTMLUListElement; // the ul that swaps the favorites when there is at least one
 
 if (!$locationInput) throw new Error('$locationInput query failed');
 if (!$keywordInput) throw new Error('$keywordInput query failed');
@@ -39,6 +41,8 @@ if (!$details) throw new Error('$details query failed');
 if (!$favorites) throw new Error('$favorites query failed');
 if (!$favoritesButton) throw new Error('$favoritesButton query failed');
 if (!$favoritesHome) throw new Error('$favoritesHome query failed');
+if (!$header) throw new Error('$header query failed');
+if (!$ul) throw new Error('$ul query failed');
 
 // the purpose of this async function is to call the API and get the necessary
 // data to show the user the events in their city based on a keyword search
@@ -73,10 +77,10 @@ async function fetchEventData(city: string, keyword: string): Promise<void> {
     }));
 
     // the for loop is iterating through all the available events and using the
-    // renderEntry function to show a list of available events
+    // renderEntry function to show a list of available events from the API call
 
     for (let i = 0; i < serializedEvents.length; i++) {
-      const $li = renderEntry(serializedEvents[i]);
+      const $li = renderEntry(serializedEvents[i], false);
       $itemsId.appendChild($li);
     }
 
@@ -90,7 +94,6 @@ $form.addEventListener('submit', (event: Event) => {
   event.preventDefault();
   const $formElements = $form.elements as FormElements;
   if (!$formElements) throw new Error('$formElements query failed');
-
   fetchEventData($formElements.location.value, $formElements.keyword.value);
 });
 
@@ -138,7 +141,10 @@ function viewSwap(
 // the purpose of the renderEntry function is to dynamically create table row elements
 // and add those to the DOM tree
 
-function renderEntry(event: Events): HTMLTableRowElement {
+function renderEntry(
+  event: Events,
+  isFavoritePage: boolean,
+): HTMLTableRowElement {
   const $tr = document.createElement('tr');
 
   const $td1 = document.createElement('td');
@@ -152,20 +158,29 @@ function renderEntry(event: Events): HTMLTableRowElement {
   $td3.textContent = event.venue;
   $td3.setAttribute('class', 'mobileHidden');
 
-  const $button = document.createElement('button');
-  $button.textContent = 'View';
-  $button.setAttribute('class', 'view-button details');
+  const $td4 = document.createElement('td');
 
-  $button.addEventListener('click', () => {
+  const $viewButton = document.createElement('button');
+  $viewButton.textContent = 'View';
+  $viewButton.setAttribute('class', 'view-button details');
+
+  $viewButton.addEventListener('click', () => {
     showEventDetails(event);
     viewSwap('details');
   });
 
+  $td4.appendChild($viewButton);
   $tr.appendChild($td1);
   $tr.appendChild($td2);
   $tr.appendChild($td3);
-  $tr.appendChild($button);
+  $tr.appendChild($td4);
 
+  if (isFavoritePage) {
+    const $deleteButton = document.createElement('button');
+    $deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+    $deleteButton.setAttribute('class', 'delete-button details');
+    $td4.appendChild($deleteButton);
+  }
   return $tr;
 }
 
@@ -173,10 +188,12 @@ function renderEntry(event: Events): HTMLTableRowElement {
 // user to their favorites list. that is the only purpose it will serve
 
 $favoritesButton.addEventListener('click', () => {
-  // readFavorites(); // need to keep this in
   viewSwap('favorites-view');
-  if ($noFavorites) {
-    toggleNoFavorites();
+  toggleNoFavorites();
+  $ul.innerHTML = '';
+  for (const event of favorites) {
+    const $li = renderEntry(event, true);
+    $ul.appendChild($li);
   }
 });
 
@@ -185,7 +202,7 @@ $favoritesButton.addEventListener('click', () => {
 function toggleNoFavorites(): void {
   if (!$noFavorites) throw new Error('$noFavorites query failed');
 
-  if (favorites.length) {
+  if (readFavorites().length) {
     $noFavorites.classList.add('hidden');
   } else {
     $noFavorites.classList.remove('hidden');
@@ -198,7 +215,7 @@ function toggleNoFavorites(): void {
 function showEventDetails(event: Events): void {
   const $details = document.querySelector('.details');
   if (!$details) throw new Error('$details query failed');
-  $details.innerHTML = ' ';
+  $details.innerHTML = '';
 
   const $eventName = document.createElement('h2');
   $eventName.textContent = event.name;
@@ -254,31 +271,21 @@ function showEventDetails(event: Events): void {
   $addFavoritesButton.textContent = 'Add to Favorites';
   $addFavoritesButton.setAttribute('class', 'favorites-button button-span');
 
-  const $ul = document.getElementById('favorites-list') as HTMLUListElement;
-  if (!$ul) throw new Error('$ul query failed');
-
   // the addFavorites event listener will be needed to listen for click events
   // and push the current entry into local storage data and the user's favorites page.
   // it should utilize a write favorites function to write that entry to the local storage
 
   $addFavoritesButton.addEventListener('click', () => {
+    // the check4Duplicates variable checks the favorites array for any duplicates
+    // if there are no duplicates it will unshift to the favorites array
+    // if there are duplicates
+    // the 'value' callback is referring to the object that represents favorites
+    // this is checking the favorites.id with the event.id
     const check4Duplicates = favorites.find((value) => value.id === event.id);
 
     if (!check4Duplicates) {
       favorites.unshift(event);
       writeFavorites();
-      const $li = renderEntry(event);
-      const $deleteDiv = document.createElement('div');
-      const $spanDelete = document.createElement('span');
-      const $deleteFavorite = document.createElement('button');
-      $deleteFavorite.textContent = 'Delete';
-      // made changes to the spanDelete set attribute - class name
-      $spanDelete.setAttribute('class', 'float-under');
-      $deleteFavorite.setAttribute('class', 'delete-button button-span');
-      $ul.appendChild($deleteDiv);
-      $deleteDiv.appendChild($spanDelete);
-      $spanDelete.appendChild($deleteFavorite);
-      $ul.appendChild($li);
     }
   });
 
@@ -356,8 +363,6 @@ function formatStartTime(dateStr: string, timeStr: string): string {
 // the $header event listener serves to redirect me back to the main-page view
 // when while i build out the functionality of my favorites view
 
-const $header = document.querySelector('h1');
-if (!$header) throw new Error('$header query failed');
 $header.addEventListener('click', () => {
   const $formElements = $form.elements as FormElements;
   if (!$formElements) throw new Error('$formElements query failed');
@@ -365,6 +370,8 @@ $header.addEventListener('click', () => {
   $form.reset();
 });
 
+// the $favoritesHome event listener serves to redirect the user to the home-page
+// view when they are in the favorites view and want to go back to the main-page
 $favoritesHome.addEventListener('click', () => {
   const $formElements = $form.elements as FormElements;
   if (!$formElements) throw new Error('$formElements query failed');

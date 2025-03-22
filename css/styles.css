@@ -108,7 +108,6 @@ p {
 }
 
 .view-button {
-  display: block;
   margin: 0 auto;
   color: white;
   background-color: #293184;
@@ -121,7 +120,6 @@ p {
 }
 
 .delete-button {
-  display: block;
   color: white;
   background-color: #293184;
   border-radius: 4px;
