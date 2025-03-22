@@ -18,6 +18,17 @@
   margin-bottom: 16px;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px;
+}
+
+.button-span {
+  padding: 0.6rem;
+}
+
 .row-end {
   display: flex;
   flex-direction: row-reverse;

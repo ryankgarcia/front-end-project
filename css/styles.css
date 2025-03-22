@@ -10,8 +10,17 @@
 }
 
 #results,
-.details {
+.details,
+#favorites-list {
   background-color: white;
+  border-radius: 10px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.transparent {
+  background-color: transparent;
   border-radius: 10px;
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -73,7 +82,8 @@ p {
 }
 
 .table-rows,
-.details {
+.details,
+#favorites-list {
   color: #293184;
   font-family: Poppins, sans-serif;
   font-weight: 300;
@@ -82,7 +92,9 @@ p {
 }
 
 .button,
-.home-button {
+.favorites-home-button,
+.home-button,
+.favorites-button {
   display: block;
   margin: 0 auto;
   color: white;
@@ -96,11 +108,22 @@ p {
 }
 
 .view-button {
-  display: block;
   margin: 0 auto;
   color: white;
   background-color: #293184;
   border-radius: 4px;
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.delete-button {
+  color: white;
+  background-color: #293184;
+  border-radius: 4px;
+  margin-left: 0.9rem;
   padding-left: 0.7rem;
   padding-right: 0.7rem;
   padding-top: 0.5rem;
@@ -121,13 +144,31 @@ p {
     transform: scale(1.2);
     background-color: #6a27e0;
     color: white;
+    font-size: 16px;
   }
 
-  .home-button:hover {
+  .home-button:hover,
+  .favorites-home-button:hover {
     transition: all 0.5s ease;
     transform: scale(1.2);
     background-color: limegreen;
     color: black;
+    font-size: 16px;
+  }
+
+  .favorites-button:hover {
+    transition: all 0.3s ease;
+    transform: scale(1.2);
+    background-color: #cc4ba5;
+    color: whitesmoke;
+  }
+
+  .delete-button:hover {
+    transition: all 0.3s ease;
+    transform: scale(1.2);
+    background-color: red;
+    color: whitesmoke;
+    font-size: 16px;
   }
 }
 

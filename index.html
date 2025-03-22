@@ -13,6 +13,9 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
   </head>
   <body>
     <header>
@@ -20,8 +23,8 @@
         <div class="row">
           <div class="column-full">
             <h1>MyEventTicket</h1>
-            <div data-view="favorites" class="row-end">
-              <a id="favorites">My Favorites</a>
+            <div data-view="favorites-button" class="row-end">
+              <a id="favorites-button">My Favorites</a>
             </div>
           </div>
         </div>
@@ -76,6 +79,16 @@
           <tbody id="items" class="table-rows"></tbody>
         </table>
         <button class="home-button">Home</button>
+      </div>
+      <div data-view="favorites-view" class="favorites-view hidden">
+        <div class="upcoming-events">
+          <p class="no-favorites">No favorites Exist</p>
+        </div>
+        <h2 class="upcoming-events">Favorite Events:</h2>
+        <ul id="favorites-list"></ul>
+        <div class="transparent">
+          <button class="favorites-home-button">Home</button>
+        </div>
       </div>
     </main>
     <script src="js/data.js"></script>
